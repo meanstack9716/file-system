@@ -1,0 +1,127 @@
+{
+	"info": {
+		"_postman_id": "8497f51a-7a2b-489d-9531-240e606754fc",
+		"name": "File System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "7103822"
+	},
+	"item": [
+		{
+			"name": "create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"Virat kohli\",\r\n    \"profession\":\"Crickter\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:5000/files/create"
+			},
+			"response": []
+		},
+		{
+			"name": "get all files",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:5000/files/get_all_files"
+			},
+			"response": []
+		},
+		{
+			"name": "get file data",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/files/get_file_data/:fileName",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"files",
+						"get_file_data",
+						":fileName"
+					],
+					"variable": [
+						{
+							"key": "fileName",
+							"value": "data1707472836353.json"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update file",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"data\":\"this is updated data\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/files/update/:fileName",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"files",
+						"update",
+						":fileName"
+					],
+					"variable": [
+						{
+							"key": "fileName",
+							"value": "data1707472836353.json"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete file",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/files/delete/:fileName",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"files",
+						"delete",
+						":fileName"
+					],
+					"variable": [
+						{
+							"key": "fileName",
+							"value": "data1707472836353.json"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

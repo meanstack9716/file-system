@@ -11,7 +11,17 @@ const createFile = async (req, res) => {
   }
   try {
     const directoryPath = path.join(__dirname, '..', 'files');
-    fs.mkdirSync(directoryPath, { recursive: true });
+    fs.mkdir(directoryPath, (err) => {
+      if (err) {
+        return res
+          .status(500)
+          .send({
+            message: 'Error while creating directory',
+            err: err.message,
+          });
+      }
+    });
+
     const filePath = path.join(
       directoryPath,
       `data${new Date().getTime()}.json`
@@ -84,7 +94,7 @@ const getFileData = (req, res) => {
     });
   }
 };
-const updateFileData = (req, res) => {
+const updateFileData = async (req, res) => {
   try {
     const { fileName } = req.params;
     const data = req.body;

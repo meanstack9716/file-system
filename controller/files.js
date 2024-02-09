@@ -4,37 +4,36 @@ import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const createFile = async (req, res) => {
+const createFile = (req, res) => {
   const data = req.body;
   if (Object.keys(data).length === 0) {
     return res.status(400).send('No data provided');
   }
   try {
     const directoryPath = path.join(__dirname, '..', 'files');
-    fs.mkdir(directoryPath, (err) => {
-      if (err) {
-        return res
-          .status(500)
-          .send({
+    if (!fs.existsSync(directoryPath)) {
+      fs.mkdir(directoryPath, (err) => {
+        if (err) {
+          return res.status(500).send({
             message: 'Error while creating directory',
             err: err.message,
           });
-      }
-    });
-
+        }
+      });
+    }
     const filePath = path.join(
       directoryPath,
       `data${new Date().getTime()}.json`
     );
     const jsonData = JSON.stringify(data);
-    await fs.promises.writeFile(filePath, jsonData, (err) => {
+    fs.writeFile(filePath, jsonData, (err) => {
       if (err) {
         return res
           .status(500)
           .send({ message: 'Error while writing file', error: err.message });
       }
+      return res.status(200).send({ message: 'file created successfully' });
     });
-    res.status(200).send('file created successfully');
   } catch (error) {
     res.status(500).send({
       message: 'Internal server error',
@@ -42,14 +41,13 @@ const createFile = async (req, res) => {
     });
   }
 };
-
 const getAllFiles = (req, res) => {
   try {
     const directoryPath = path.join(__dirname, '..', 'files');
     fs.readdir(directoryPath, (err, files) => {
       if (err) {
         return res.status(500).send({
-          message: 'Internal server error',
+          message: 'Error while reading directory',
           error: err.message,
         });
       }
@@ -66,7 +64,6 @@ const getFileData = (req, res) => {
   try {
     const { fileName } = req.params;
     const filePath = path.join(__dirname, '..', 'files', fileName);
-
     fs.readFile(filePath, 'utf8', (err, data) => {
       if (err) {
         return res.status(500).send({
@@ -74,7 +71,6 @@ const getFileData = (req, res) => {
           error: err.message,
         });
       }
-
       let jsonData;
       try {
         jsonData = JSON.parse(data);
@@ -84,7 +80,6 @@ const getFileData = (req, res) => {
           error: error.message,
         });
       }
-
       res.status(200).json({ data: jsonData });
     });
   } catch (error) {
@@ -94,7 +89,7 @@ const getFileData = (req, res) => {
     });
   }
 };
-const updateFileData = async (req, res) => {
+const updateFileData = (req, res) => {
   try {
     const { fileName } = req.params;
     const data = req.body;
